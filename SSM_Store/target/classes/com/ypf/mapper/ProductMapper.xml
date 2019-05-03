@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.ypf.mapper.ProductMapper">
+ 	<select id="getNewProduct" resultType="Product">
+ 	select * from product where pflag=0 order by pdate desc
+ 	</select>
+ 	<select id="getHotNewProduct" resultType="Product">
+ 	select * from product where pflag=0 and is_hot=1 order by pdate desc
+ 	</select>
+ 	
+ 	<select id="getProductById" parameterType="String" resultType="Product">
+ 	select * from product where pid=#{pid}
+ 	</select>
+ 	
+ 	<select id="getTotalProducts" parameterType="String" resultType="int">
+ 	select count(*) from product where cid=#{cid}
+ 	</select>
+ 	<select id="getProducts" resultType="Product">
+ 	select * from product where cid=#{cid} limit #{start},#{size}
+ 	</select>
+</mapper>

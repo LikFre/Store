@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+ <mapper namespace="com.ypf.mapper.OrderMapper">
+ 	<insert id="SaveOrderItem" parameterType="OrderItem">
+ 	insert into orderitem values(#{itemid},#{quantity},#{total},#{product.pid},#{order.oid})
+ 	</insert>
+ 	<insert id="SaveOrder" parameterType="Order">
+ 	insert into orders(oid,ordertime,total,state,uid) values(#{oid},#{orderTime},#{total},#{state},#{user.uid})
+ 	</insert>
+ 	<select id="getTotalOrderByUid" parameterType="String" resultType="int">
+ 	select count(*) from orders where uid=#{uid}
+ 	</select>
+ 	
+ 	<select id="getOrders" resultMap="OrderMap">
+ 	select * from orders where uid=#{uid} limit #{start},#{size} 
+ 	</select>
+ 	<resultMap type="Order" id="OrderMap">
+ 	<id property="oid" column="oid"/>
+ 	<collection property="list" column="oid" select="getOrderitemByoid"></collection>
+ 	</resultMap>
+ 	<select id="getOrderitemByoid" parameterType="String" resultMap="OrderItemMap">
+ 		select * from orderitem where oid=#{oid}
+ 	</select>
+ 	<resultMap type="OrderItem" id="OrderItemMap">
+ 	<association property="product" select="getProductByPid" column="pid"></association>
+ 	</resultMap>
+ 	<select id="getProductByPid" parameterType="String" resultType="Product">
+ 	select * from product where pid=#{pid}
+ 	</select>
+ 	
+ 	<select id="getOrderByOid" parameterType="String" resultMap="OrderMap">
+ 	select * from orders where oid=#{oid}
+ 	</select>
+</mapper>
